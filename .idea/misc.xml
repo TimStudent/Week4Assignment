@@ -6,6 +6,8 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3094867807153966" />
         <entry key="app/src/main/res/layout/fragment_joke.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_movie.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_popular.xml" value="0.15989583333333332" />
+        <entry key="app/src/main/res/layout/fragment_upcoming.xml" value="0.30885416666666665" />
         <entry key="app/src/main/res/layout/fragment_watch_movies.xml" value="0.2590909090909091" />
         <entry key="app/src/main/res/layout/single_item.xml" value="0.25" />
         <entry key="app/src/main/res/menu/nav_menu.xml" value="0.1" />

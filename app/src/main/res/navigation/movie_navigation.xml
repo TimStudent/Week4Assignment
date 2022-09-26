@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/joke_navigation"
-    app:startDestination="@id/JokeFragment">
+    app:startDestination="@id/NowPlayingFragment">
     <fragment
-        android:id="@+id/JokeFragment"
+        android:id="@+id/NowPlayingFragment"
         android:name="com.example.week4assignment.ui.MovieFragment"
         tools:layout="@layout/fragment_movie">
-
         <action
             android:id="@+id/action_JokeFragment_to_WatchMovieFragment"
             app:destination="@id/WatchMovieFragment" />
@@ -17,6 +16,21 @@
         android:id="@+id/WatchMovieFragment"
         android:name="com.example.week4assignment.ui.WatchMoviesFragment"
         tools:layout="@layout/fragment_watch_movies">
-
+    </fragment>
+    <fragment
+        android:id="@+id/UpcomingMoviesFragment"
+        android:name="com.example.week4assignment.ui.UpcomingFragment"
+        tools:layout="@layout/fragment_upcoming">
+        <action
+            android:id="@+id/action_UpcomingMoviesFragment_to_WatchMovieFragment"
+            app:destination="@id/WatchMovieFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/PopularMoviesFragment"
+        android:name="com.example.week4assignment.ui.PopularFragment"
+        tools:layout="@layout/fragment_popular">
+        <action
+            android:id="@+id/action_PopularMoviesFragment_to_WatchMovieFragment"
+            app:destination="@id/WatchMovieFragment" />
     </fragment>
 </navigation>

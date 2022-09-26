@@ -10,6 +10,7 @@ import com.example.week4assignment.model.room.*
 import com.example.week4assignment.utils.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -61,7 +62,6 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
                     emit(UIState.ERROR(e))
                 }
             }
-
             flowHolder.collect {
                 withContext(Dispatchers.Main){
                 }
@@ -69,6 +69,55 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    fun getUpcomingData(){
+        viewModelScope.launch(Dispatchers.IO){
+            val flowHolder: Flow<UIState> = flow {
+                emit(UIState.LOADING)
+                try{
+                    val response = ApiHelper.serviceApi.getUpcoming()
+                    if (response.isSuccessful){
+                        response.body()?.let{ it ->
+                            emit(UIState.SUCCESS(it.movieDomain.mapToMovieList()))
+                        }
+                    }
+                }
+                catch (e: Exception){
+                    emit(UIState.ERROR(e))
+                }
+            }
+            flowHolder.collect{
+                withContext(Dispatchers.Main){
+                }
+                _status.postValue(it)
+            }
+        }
+    }
+
+    fun getPopularData(){
+        viewModelScope.launch(Dispatchers.IO){
+            val flowHolder: Flow<UIState> = flow {
+                emit(UIState.LOADING)
+                try{
+                    val response = ApiHelper.serviceApi.getPopular()
+                    if (response.isSuccessful){
+                        response.body()?.let{ it ->
+                            emit(UIState.SUCCESS(it.movieDomain.mapToMovieList()))
+                        }
+                    }
+                }
+                catch (e: Exception){
+                    emit(UIState.ERROR(e))
+                }
+            }
+            flowHolder.collect{
+                withContext(Dispatchers.Main){
+                }
+                _status.postValue(it)
+            }
+        }
+    }
+
     fun getTrailerData(){
         viewModelScope.launch(Dispatchers.IO){
             val flowHolder: Flow<UIState> = flow {

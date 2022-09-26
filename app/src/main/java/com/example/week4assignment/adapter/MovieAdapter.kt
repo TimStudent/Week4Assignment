@@ -11,6 +11,7 @@ import com.example.week4assignment.R
 import com.example.week4assignment.databinding.SingleItemBinding
 import com.example.week4assignment.model.room.MovieData
 import com.squareup.picasso.Picasso
+import java.lang.Exception
 
 
 class MovieAdapter(
@@ -63,9 +64,30 @@ class ViewHolder(val binding: SingleItemBinding) : RecyclerView.ViewHolder(bindi
         }
         binding.play.setOnClickListener {
             Log.d(TAG, movie.id.toString())
-            Navigation.createNavigateOnClickListener(
-                R.id.action_JokeFragment_to_WatchMovieFragment)
-                .onClick(binding.play)
+            try{
+                Navigation.createNavigateOnClickListener(
+                    R.id.action_JokeFragment_to_WatchMovieFragment)
+                    .onClick(binding.play)
+            }
+            catch (e: Exception){
+                print(e.stackTrace)
+            }
+            try {
+                Navigation.createNavigateOnClickListener(
+                    R.id.action_UpcomingMoviesFragment_to_WatchMovieFragment
+                ).onClick(binding.play)
+            }
+            catch (e: Exception){
+                print(e.stackTrace)
+            }
+            try {
+                Navigation.createNavigateOnClickListener(
+                    R.id.action_PopularMoviesFragment_to_WatchMovieFragment
+                ).onClick(binding.play)
+            }
+            catch (e: Exception){
+                print(e.stackTrace)
+            }
             onMovieClickListener.invoke(movie)
         }
     }

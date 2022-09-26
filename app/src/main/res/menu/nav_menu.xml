@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/JokeFragment"
-        android:title="@string/movies"
+        android:id="@+id/NowPlayingFragment"
+        android:title="@string/now_playing"
+        android:icon="@drawable/ic_launcher_background">
+    </item>
+    <item
+        android:id="@+id/UpcomingMoviesFragment"
+        android:title="@string/upcoming"
+        android:icon="@drawable/ic_launcher_background">
+    </item>
+    <item
+        android:id="@+id/PopularMoviesFragment"
+        android:title="@string/popular"
         android:icon="@drawable/ic_launcher_background">
     </item>
 </menu>
