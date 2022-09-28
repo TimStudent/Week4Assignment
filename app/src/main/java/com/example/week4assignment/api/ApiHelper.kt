@@ -1,5 +1,6 @@
 package com.example.week4assignment.api
 
+import com.example.week4assignment.model.DetailsData
 import com.example.week4assignment.model.MoviesData
 import com.example.week4assignment.model.TrailersData
 import com.example.week4assignment.model.room.MovieData
@@ -37,6 +38,13 @@ interface ApiHelper {
         @Query("api_key") api_key: String = "819950d4cf35be1fb70d8746bc0796bf",
         @Query("language") language: String = "en-us"
     ): Response<TrailersData>
+
+    @GET("{movieID}?")
+    suspend fun getMovieDetails(
+        @Path("movieID") movieId: Int = 0,
+        @Query("api_key") api_key: String = "819950d4cf35be1fb70d8746bc0796bf",
+        @Query("language") language: String = "en-us"
+    ): Response<DetailsData>
 
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/3/movie/"

@@ -31,6 +31,10 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
     var moviePoster = ""
     var site = ""
     var key = ""
+    var movieduration = 0
+    var popularity = 0.0
+    var homepage = ""
+    var genreList = emptyList<Genre>()
 
     init {
         val movieDao = MovieDataBase.getDatabase(application).movieDao()
@@ -52,7 +56,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
                     val response = ApiHelper.serviceApi.getMovies()
                     if(response.isSuccessful){
                         response.body()?.let{ it ->
-                            emit(UIState.SUCCESS(it.movieDomain.mapToMovieList()))
+                            emit(UIState.SUCCESS(it.movieDomain.mapToMovieList(), null))
                         }
                     }
                     else{
@@ -78,7 +82,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
                     val response = ApiHelper.serviceApi.getUpcoming()
                     if (response.isSuccessful){
                         response.body()?.let{ it ->
-                            emit(UIState.SUCCESS(it.movieDomain.mapToMovieList()))
+                            emit(UIState.SUCCESS(it.movieDomain.mapToMovieList(), null))
                         }
                     }
                 }
@@ -102,7 +106,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
                     val response = ApiHelper.serviceApi.getPopular()
                     if (response.isSuccessful){
                         response.body()?.let{ it ->
-                            emit(UIState.SUCCESS(it.movieDomain.mapToMovieList()))
+                            emit(UIState.SUCCESS(it.movieDomain.mapToMovieList(), null))
                         }
                     }
                 }
@@ -118,6 +122,30 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun getMovieDetailData(){
+        viewModelScope.launch(Dispatchers.IO){
+            val flowHolder: Flow<UIState> = flow {
+                emit(UIState.LOADING)
+                try{
+                    val response = ApiHelper.serviceApi.getMovieDetails(movieId = movieID)
+                    if(response.isSuccessful){
+                        response.body()?.let { it ->
+                            emit(UIState.SUCCESS(null,null, DetailData(it.adult,
+                                it.genres,it.popularity,it.homepage,it.id,it.runtime)))
+                        }
+                    }
+                }catch (e: Exception){
+                    emit(UIState.ERROR(e))
+                }
+            }
+            flowHolder.collect{
+                withContext(Dispatchers.Main){
+                    _status.postValue(it)
+                }
+            }
+        }
+    }
+
     fun getTrailerData(){
         viewModelScope.launch(Dispatchers.IO){
             val flowHolder: Flow<UIState> = flow {
@@ -126,7 +154,7 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
                     val response = ApiHelper.serviceApi.getMovieTrailer(movieId = movieID)
                     if(response.isSuccessful){
                         response.body()?.let { it ->
-                            emit(UIState.SUCCESS2(it.trailerDomain.mapToTrailerList()))
+                            emit(UIState.SUCCESS(null, it.trailerDomain.mapToTrailerList()))
                         }
                     }
                 }catch (e: Exception){

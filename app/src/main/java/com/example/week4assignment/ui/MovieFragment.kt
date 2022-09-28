@@ -53,11 +53,7 @@ class MovieFragment : Fragment() {
                     binding.eventRecycler.visibility = View.VISIBLE
                     state.success?.let { adapter.update(it) }
                 }
-                is UIState.SUCCESS2  -> {
-                    binding.loading.visibility = View.GONE
-                    binding.eventRecycler.visibility = View.VISIBLE
-                    state.success
-                }
+
                 is UIState.ERROR -> {
                     binding.loading.visibility = View.GONE
                     binding.eventRecycler.visibility = View.GONE

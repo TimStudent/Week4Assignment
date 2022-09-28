@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.week4assignment.R
+import com.example.week4assignment.adapter.DetailAdapter
 import com.example.week4assignment.adapter.TrailersAdapter
 import com.example.week4assignment.databinding.FragmentWatchMoviesBinding
 import com.example.week4assignment.model.MovieViewModel
@@ -30,6 +31,16 @@ class WatchMoviesFragment : Fragment() {
         }
     }
 
+    private val adapter2 by lazy {
+        DetailAdapter{
+            mMovieViewModel.homepage = it.homepage
+            mMovieViewModel.movieduration = it.runtime
+            mMovieViewModel.popularity = it.popularity
+            mMovieViewModel.genreList = it.genres
+
+        }
+    }
+
     private lateinit var mMovieViewModel: MovieViewModel
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -43,6 +54,11 @@ class WatchMoviesFragment : Fragment() {
         val recyclerView = binding.eventRecycler
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        //
+        val rv = binding.eventRecycler2
+        rv.adapter=adapter2
+        rv.layoutManager=LinearLayoutManager(requireContext())
+        //
         binding.IdView.text = mMovieViewModel.movieID.toString()
         binding.TitleView.text = mMovieViewModel.movieTitle
         binding.OverviewView.text = mMovieViewModel.movieOverView
@@ -56,29 +72,30 @@ class WatchMoviesFragment : Fragment() {
         mMovieViewModel.status.observe(viewLifecycleOwner) { state ->
             when(state) {
                 is UIState.LOADING -> {
+                    binding.loading.visibility = View.VISIBLE
                     binding.eventRecycler.visibility = View.GONE
+                    binding.eventRecycler2.visibility = View.GONE
                 }
                 is UIState.SUCCESS  -> {
-
+                    binding.loading.visibility = View.GONE
                     binding.eventRecycler.visibility = View.VISIBLE
-                    state.success
-                }
-                is UIState.SUCCESS2  -> {
-
-                    binding.eventRecycler.visibility = View.VISIBLE
-                    state.success?.let { adapter.update(it) }
+                    binding.eventRecycler2.visibility = View.VISIBLE
+                    state.success2?.let { adapter.update(it) }
+                    state.success3?.let { adapter2.add(it) }
                 }
                 is UIState.ERROR -> {
-
+                    binding.loading.visibility = View.VISIBLE
                     binding.eventRecycler.visibility = View.GONE
+                    binding.eventRecycler2.visibility = View.VISIBLE
                     AlertDialog.Builder(requireActivity())
-                        .setTitle("Error Loading Music")
+                        .setTitle("Error Loading")
                         .setMessage(state.error.localizedMessage)
                         .setNegativeButton("DISMISS") { dialog, _ ->
                             dialog.dismiss()
                         }
                         .setPositiveButton("Retry") { dialog, _ ->
                             mMovieViewModel.getTrailerData()
+                            mMovieViewModel.getMovieDetailData()
                             dialog.dismiss()
                         }
                         .create()
@@ -88,6 +105,7 @@ class WatchMoviesFragment : Fragment() {
             }
         }
         mMovieViewModel.getTrailerData()
+        mMovieViewModel.getMovieDetailData()
         binding.webView.webChromeClient
         binding.webView.settings.javaScriptEnabled = true
         binding.webView.webViewClient
