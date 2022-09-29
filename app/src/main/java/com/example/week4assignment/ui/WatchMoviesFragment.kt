@@ -104,8 +104,9 @@ class WatchMoviesFragment : Fragment() {
 
             }
         }
+
         mMovieViewModel.getTrailerData()
-        mMovieViewModel.getMovieDetailData()
+        //mMovieViewModel.getMovieDetailData()
         binding.webView.webChromeClient
         binding.webView.settings.javaScriptEnabled = true
         binding.webView.webViewClient

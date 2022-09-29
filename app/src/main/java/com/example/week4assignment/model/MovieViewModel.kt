@@ -48,12 +48,12 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         readData = repository.readAllData
     }
 
-    fun getMovieData(){
+    fun getMovieData(pageNumber: Int = 1){
         viewModelScope.launch(Dispatchers.IO){
             val flowHolder: Flow<UIState> = flow {
                 emit(UIState.LOADING)
                 try{
-                    val response = ApiHelper.serviceApi.getMovies()
+                    val response = ApiHelper.serviceApi.getMovies(page = pageNumber)
                     if(response.isSuccessful){
                         response.body()?.let{ it ->
                             emit(UIState.SUCCESS(it.movieDomain.mapToMovieList(), null))
@@ -74,12 +74,12 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getUpcomingData(){
+    fun getUpcomingData(pageNumber: Int = 1){
         viewModelScope.launch(Dispatchers.IO){
             val flowHolder: Flow<UIState> = flow {
                 emit(UIState.LOADING)
                 try{
-                    val response = ApiHelper.serviceApi.getUpcoming()
+                    val response = ApiHelper.serviceApi.getUpcoming(page = pageNumber)
                     if (response.isSuccessful){
                         response.body()?.let{ it ->
                             emit(UIState.SUCCESS(it.movieDomain.mapToMovieList(), null))
@@ -98,12 +98,12 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getPopularData(){
+    fun getPopularData(pageNumber: Int = 1){
         viewModelScope.launch(Dispatchers.IO){
             val flowHolder: Flow<UIState> = flow {
                 emit(UIState.LOADING)
                 try{
-                    val response = ApiHelper.serviceApi.getPopular()
+                    val response = ApiHelper.serviceApi.getPopular(page = pageNumber)
                     if (response.isSuccessful){
                         response.body()?.let{ it ->
                             emit(UIState.SUCCESS(it.movieDomain.mapToMovieList(), null))

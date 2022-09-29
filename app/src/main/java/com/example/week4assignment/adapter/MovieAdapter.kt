@@ -46,6 +46,12 @@ class MovieAdapter(
         movieList.addAll(newData)
         notifyDataSetChanged()
     }
+
+    fun add(newData: List<MovieData>){
+        movieList.addAll(newData)
+        notifyDataSetChanged()
+    }
+
 }
 
 class ViewHolder(val binding: SingleItemBinding) : RecyclerView.ViewHolder(binding.root) {
